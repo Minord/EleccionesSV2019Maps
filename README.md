@@ -15,3 +15,27 @@ this is a project for learn OpenLayers and the propurce is make multiple visuali
 * Aprender ha utilizar OpenLayers
 * Realizar servicios de WebMapping desde Python
 * Utilizar PostGis para modificar los datos base
+
+
+## Mapas
+
+## Mapas de Pais
+* Mapa de pais
+  * Departamentos
+  * Municipios
+  
+* Mapas departamentales - Detalles
+  * Santa Ana
+  * Aguachapan
+  * Sonsonate
+  * La Libertad
+  * Chalatenango
+  * San Salvador
+  * La Paz
+  * Cuscactlan 
+  * Cabañas
+  * San Vicente
+  * Usulutan
+  * San Miguel
+  * Morazan
+  * La Libertad
