@@ -19,7 +19,6 @@ this is a project for learn OpenLayers and the propurce is make multiple visuali
 
 ## Mapas
 
-## Mapas de Pais
 * Mapa de pais
   * Departamentos
   * Municipios
