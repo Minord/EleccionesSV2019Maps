@@ -11,31 +11,34 @@ CREATE DATABASE Elections2019Exploratory;
 CREATE EXTENSION postgis;
 
 
--- Crear tabla de centros de votacion
-CREATE TABLE centros (
-	centro_id SERIAL PRIMARY KEY,
-	nombre varchar(50),
-	direccion varchar(100)
-	pos_geom geometry( Point )
-);
-
 -- Crear tabla de departamentos
 CREATE TABLE departamentos (
 	cod_dep integer PRIMARY KEY,
 	nombre varchar(50),
-	pos_geom geometry( POLYGON )
+	pos_geom geometry(POLYGON, 4326 )
 );
 -- crear tablas de municipios
 CREATE TABLE municipios (
 	cod_munic integer PRIMARY KEY,
 	nombre varchar(50),
-	pos_geom geometry( POLYGON )
+	pos_geom geometry(POLYGON, 4326 ),
+	cod_dep integer REFERENCES departamentos( cod_dep )
 );
 
 CREATE TABLE cantones (
 	cod_canton integer PRIMARY KEY,
 	nombre varchar(50),
-	pos_geom geometry( POLYGON )
+	pos_geom geometry( POLYGON, 4326 ),
+	cod_munic integer REFERENCES municipios( cod_munic )
+);
+
+-- Crear tabla de centros de votacion
+CREATE TABLE centros (
+	centro_id SERIAL PRIMARY KEY,
+	nombre varchar(50),
+	direccion varchar(100),
+	pos_geom geometry( Point, 4326 ),
+	cod_munic integer REFERENCES municipios (cod_munic)
 );
 
 -- Crear la tabla de actas
@@ -64,6 +67,3 @@ CREATE TABLE actas (
 	votos_validos_mas_otros integer,
 	votos_totales integer
 );
-
-
-
