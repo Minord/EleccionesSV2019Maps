@@ -15,12 +15,14 @@ CREATE EXTENSION postgis;
 CREATE TABLE departamentos (
 	cod_dep integer PRIMARY KEY,
 	nombre varchar(50),
+	poblacion INTEGER,
 	pos_geom geometry(POLYGON, 4326 )
 );
 -- crear tablas de municipios
 CREATE TABLE municipios (
 	cod_munic integer PRIMARY KEY,
 	nombre varchar(50),
+	poblacion INTEGER,
 	pos_geom geometry(POLYGON, 4326 ),
 	cod_dep integer REFERENCES departamentos( cod_dep )
 );
@@ -28,6 +30,7 @@ CREATE TABLE municipios (
 CREATE TABLE cantones (
 	cod_canton integer PRIMARY KEY,
 	nombre varchar(50),
+	poblacion INTEGER,
 	pos_geom geometry( POLYGON, 4326 ),
 	cod_munic integer REFERENCES municipios( cod_munic )
 );
@@ -37,7 +40,7 @@ CREATE TABLE centros (
 	centro_id SERIAL PRIMARY KEY,
 	nombre varchar(50),
 	direccion varchar(100),
-	pos_geom geometry( Point, 4326 ),
+	pos_geom geometry( POINT, 4326 ),
 	cod_munic integer REFERENCES municipios (cod_munic)
 );
 
@@ -67,3 +70,4 @@ CREATE TABLE actas (
 	votos_validos_mas_otros integer,
 	votos_totales integer
 );
+
