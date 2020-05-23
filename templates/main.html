@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang= "es">
+    <head>
+        <title> {% block title %}{% endblock %} - Mapas Elecciones</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/test1.css') }}">
+    </head>
+    <body>
+        <!--Made nav here-->
+        <nav></nav>
+        <!--Insert content here-->
+        <div id = "content">{% block content %}{% endblock %}</div>
+        <!-- Made Footer her-->
+        <footer></footer>
+    </body>
+</html>
