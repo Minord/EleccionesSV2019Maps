@@ -4,5 +4,20 @@
 <h1>Un mapa simple de El salvador</h1>
 <h4>Mapa Base</h4>
 <p>Este mapa muestra de forma simple El mapa de <strong>El Salvador</strong> y maneja una forma no saturada para poder agregar elementos con mas significado en mapas posteriores.</p>
-
+<!--Add my for testing-->
+<div id="map" class="map"></div>
+<script type="text/javascript">
+  var map = new ol.Map({
+    target: 'map',
+    layers: [
+      new ol.layer.Tile({
+        source: new ol.source.OSM()
+      })
+    ],
+    view: new ol.View({
+      center: ol.proj.fromLonLat([-88.85, 13.75]),
+      zoom: 8.5
+    })
+  });
+</script>
 {% endblock %}

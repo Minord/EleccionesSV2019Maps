@@ -30,3 +30,9 @@ nav {
     margin-right: 5rem;
     float: right;
 }
+
+.map {
+    height: 40rem;
+    width: 100%;
+    max-width: 80rem;
+}
