@@ -10,8 +10,51 @@
   var map = new ol.Map({
     target: 'map',
     layers: [
-      new ol.layer.Tile({
-        source: new ol.source.OSM()
+      //new ol.layer.Tile({
+      //  source: new ol.source.OSM()
+     // }),
+      
+      new ol.layer.Vector({
+        title: "cantones",
+        source: new ol.source.Vector({
+                 projection : 'EPSG:4326',
+                 url: 'http://127.0.0.1:5000/geoserver/cantones.geojson',
+                 format: new ol.format.GeoJSON()
+        }),
+        style: new ol.style.Style({
+          stroke: new ol.style.Stroke({
+            color: 'rgba(200,200,255,1)',
+            width: 0.5
+          })
+        })
+      }),
+      new ol.layer.Vector({
+        title: "municipios",
+        source: new ol.source.Vector({
+                 projection : 'EPSG:4326',
+                 url: 'http://127.0.0.1:5000/geoserver/municipios.geojson',
+                 format: new ol.format.GeoJSON()
+        }),
+        style: new ol.style.Style({
+          stroke: new ol.style.Stroke({
+            color: 'rgba(150,150,255,1)',
+            width: 1
+          })
+        })
+      }),
+      new ol.layer.Vector({
+        title: "departamentos",
+        source: new ol.source.Vector({
+                 projection : 'EPSG:4326',
+                 url: 'http://127.0.0.1:5000/geoserver/departementos.geojson',
+                 format: new ol.format.GeoJSON()
+        }),
+        style: new ol.style.Style({
+          stroke: new ol.style.Stroke({
+            color: 'rgba(50,50,255,1)',
+            width: 1.5
+          })
+        })
       })
     ],
     view: new ol.View({
