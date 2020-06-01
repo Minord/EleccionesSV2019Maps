@@ -1,0 +1,15 @@
+{
+  "name": "static",
+  "version": "1.0.0",
+  "description": "This is the js code needed for my project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Diego Orellana (Minord)",
+  "license": "ISC",
+  "dependencies": {
+    "ok": "^0.1.2",
+    "ol": "^6.3.1"
+  }
+}
