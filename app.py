@@ -22,6 +22,7 @@ db.init_app(app)
 #set FLASK_APP= app.py
 #flask run
 
+#################### NAVEGABLE PAGES ###########################
 @app.route('/')
 def hello_world():
     return render_template('index.html')
@@ -31,6 +32,10 @@ def hello_world():
 def simple_map():
     return render_template('simple_map.html')
 
+@app.route('/sandbox')
+def sandbox():
+    return render_template('sandbox.html')
+##################### GEO DATA PROVIDERS ###################
 @app.route('/geoserver')
 def geo_directory():
     return "This Go to be the map service directory"
