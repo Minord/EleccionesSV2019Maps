@@ -12,7 +12,9 @@
   "author": "Diego Orellana (Minord)",
   "license": "ISC",
   "dependencies": {
-    "ol": "^6.3.1"
+    "css-loader": "^3.5.3",
+    "ol": "^6.3.1",
+    "style-loader": "^1.2.1"
   },
   "devDependencies": {
     "webpack": "^4.43.0",

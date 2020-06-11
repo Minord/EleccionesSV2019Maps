@@ -73,6 +73,17 @@ def geo_cantones():
     cur.close()
     return str(result[0]).replace("'", '"')
 
+@app.route('/geoserver/minicipios-in-dep/<dep>.geojson')
+def geo_cantones():
+    db_conn = db.get_db()
+    #queries
+    cur = db_conn.cursor()
+    cur.execute(limits_queries.cantones_geojson())
+    result = cur.fetchone()
+    db_conn.commit()
+    cur.close()
+    return str(result[0]).replace("'", '"')
+
 
 @app.route('/dbtest')
 def database_test():
