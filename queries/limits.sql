@@ -65,22 +65,14 @@ SELECT row_to_json(result_s1) FROM (
 {% endsql %}
 
 {% sql 'cantones_in_dep', note='This query return a geojson'%}
-
-
-WITH valid_cods_munic_arr AS (
-	SELECT cod_munic 
-	FROM municipios
-	WHERE cod_dep = {{ cod_dep | guards.integer }}
-)
-
 SELECT row_to_json(result_s1) FROM (
 	SELECT 'FeatureCollection' as type, array_agg(row_to_json(result_f)) as features
 	FROM (
 		SELECT 'Feature' as type,
-		json_build_object ('cod_canton', cod_canton,'cod_munic', cantones.cod_munic, 'nombre', nombre) as properties,
-		cast(ST_AsGeoJson(pos_geom) as json) as geometry
+		json_build_object ('cod_canton', cod_canton,'cod_munic', cantones.cod_munic, 'nombre', cantones.nombre) as properties,
+		cast(ST_AsGeoJson(cantones.pos_geom) as json) as geometry
 		FROM cantones
-		INNER JOIN valid_cods_munic_arr ON cantones.cod_munic = valid_cods_munic_arr.cod_munic
+        INNER JOIN departamentos ON departamentos.cod_dep = {{cod_dep | guards.integer}} AND ST_Contains(departamentos.pos_geom, cantones.pos_geom)
 	) AS result_f
 ) as result_s1
 

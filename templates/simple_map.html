@@ -15,11 +15,11 @@
      // }),
       
       new ol.layer.Vector({
-        maxZoom: 10,
+        minZoom: 6,
         title: "cantones",
         source: new ol.source.Vector({
                  projection : 'EPSG:4326',
-                 url: 'http://127.0.0.1:5000/geoserver/cantones.geojson',
+                 url: 'http://127.0.0.1:5000/geoserver/cantones-dep-9.geojson',
                  format: new ol.format.GeoJSON()
         }),
         style: new ol.style.Style({
@@ -33,7 +33,7 @@
         title: "municipios",
         source: new ol.source.Vector({
                  projection : 'EPSG:4326',
-                 url: 'http://127.0.0.1:5000/geoserver/municipios.geojson',
+                 url: 'http://127.0.0.1:5000/geoserver/municipios-dep-3.geojson',
                  format: new ol.format.GeoJSON()
         }),
         style: new ol.style.Style({
