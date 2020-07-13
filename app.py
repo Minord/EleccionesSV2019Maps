@@ -1,23 +1,23 @@
+#std libs
 import os
 import json
 
-
+#flask imports
 from flask import Flask, jsonify
 from flask import render_template, url_for
 from flask import request
-from . import db
 
-#add snaql for handle the sql in separate files
+#third party
 import psycopg2.extras
 from snaql.factory import Snaql
 
-#create the classes and instances for make use of the queries to DB
-root_location = os.path.abspath(os.path.dirname(__file__))
-snaql_factory = Snaql(root_location, 'queries')
-limits_queries = snaql_factory.load_queries('limits.sql')
+#project imports
+from . import db
+from . import api
 
 #creating the app
 app = Flask(__name__)
+app.register_blueprint(api.blueprint)
 db.init_app(app)
 
 #Comands to execute the app for windows
@@ -26,7 +26,10 @@ db.init_app(app)
 #set FLASK_APP= app.py
 #flask run
 
-
+#create the classes and instances for make use of the queries to DB
+root_location = os.path.abspath(os.path.dirname(__file__))
+snaql_factory = Snaql(root_location, 'queries')
+limits_queries = snaql_factory.load_queries('limits.sql')
 
 #################### NAVEGABLE PAGES ###########################
 @app.route('/')
@@ -44,8 +47,6 @@ def simple_map():
 def sandbox():
     """this is a experimental end point for test experimental pages"""
     return render_template('sandbox.html')
-
-
 
 
 
@@ -228,17 +229,6 @@ class Departamentos():
 
         return exist
 
-#The end points for departamento API
-@app.route('/geoserver/departamentos')
-def departamentos():
-    pass
-@app.route('/geoserver/departamentos/<cod_dep>')
-def departamento(cod_dep):
-    pass
-@app.route('/geoserver/departamentos/dict')
-def departamentos_dict():
-    deps = Departamentos(db, request)
-    return deps.get_dict()
 #-------------------------------------------------------------------------------------------------------
 #END WORKING AREA
 
