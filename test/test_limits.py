@@ -5,8 +5,14 @@ import json
 from api.limits import (description_to_dict,
                     check_limit_type,
                     extract_props,
-                    db_to_json, db_to_geojson)
-
+                    db_to_json, db_to_geojson,
+                    look_for_father_dep,
+                    look_for_father_munic,
+                    look_for_political_classes,
+                    look_for_population,
+                    look_for_geometry,
+                    filter_per_ids,
+                    filter_per_deps_ids)
 
 
 class TestColumn():
@@ -143,3 +149,65 @@ class TestLimitsMethods(unittest.TestCase):
         expected_result = json.dumps(json.loads(expected_geojson))
         result = db_to_geojson(db_result, description)
         self.assertEqual(result, expected_result, "do not match")
+
+    def test_look_for_father_munic(self):
+        args = {"father-munic": 'true'}
+
+        expected_result = {'cod_munic': True, 'nombre_munic': True}
+        result = look_for_father_munic(args)
+
+        self.assertEqual(result, expected_result, "do not match")
+
+    def test_look_for_father_dep(self):
+        args = {'father-dep': 'true'}
+
+        expected_result = {'cod_dep': True, 'nombre_dep': True}
+        result = look_for_father_dep(args)
+
+        self.assertEqual(result, expected_result, "do not match")
+
+    def test_look_for_political_calsses(self):
+        args = {'arena-coalision': 'true', 'fmln': 'true',
+                'gana': 'true', 'vamos': 'true'}
+
+        expected_result = {'arena_coalision_votos': True,
+                           'fmln_votos': True, 'gana_votos': True,
+                           'vamos_votos': True}
+        result = look_for_political_classes(args)
+        self.assertEqual(result, expected_result, "do not match")
+
+    def test_look_for_population(self):
+        args = {'poblacion': 'true'}
+
+        expected_result = {'poblacion': True}
+        result = look_for_population(args)
+
+        self.assertEqual(result, expected_result, "do not match")
+
+    def test_look_for_geometry(self):
+        args = {'geometry': 'true'}
+
+        expected_result = {'geometry': True}
+        result = look_for_geometry(args)
+
+        self.assertEqual(result, expected_result, "do not match")
+
+    def test_filter_per_ids(self):
+        args = {'ids': '1,2,3'}
+        cod = '3'
+
+        expected_result = {'ids': [3]}
+        result = filter_per_ids(args, cod = cod)
+        self.assertEqual(result, expected_result, "do not match")
+
+        expected_result = {'ids': [1, 2, 3]}
+        result = filter_per_ids(args)
+        self.assertEqual(result, expected_result, "do not match")
+
+    def test_filter_per_deps_ids(self):
+        args = {'deps': '1,2,3'}
+
+        expected_result = {'deps': [1, 2, 3]}
+        result = filter_per_deps_ids(args)
+        self.assertEqual(result, expected_result, "do not match")
+

@@ -4,6 +4,8 @@ import psycopg2
 import shapely.wkt
 import shapely.geometry
 
+import db
+
 def description_to_dict(description):
     """This take description format of psycopg2 cursor.description
     and convert to a simple dict with name and col_pos values"""
@@ -94,7 +96,6 @@ def db_to_json(db_result, description):
 def db_to_geojson(db_result, description):
     """Convert the fetchall() result of db query and convert it 
     to geo+json format"""
-    #TODO: here we have to chek if geom json.dumps works good.
     features = []
     for row in db_result:
         props = extract_props(row, description)
@@ -110,73 +111,104 @@ def db_to_geojson(db_result, description):
     return json.dumps(featureCollection)
 
 
-class Limit():
+#make query to db
+def execute_query(query): #TODO: this should be move to limits
+    """Execute a query in db and return it the result tuple list and
+    a tuple with a description in a dictionary format"""
+    conn = db.get_db()
+    cur = conn.cursor()
+    cur.execute(query)
+    db_result = cur.fetchall()
+    description = cur.description()
+    description = description_to_dict(description)
+    cur.close()
+    conn.close()
+    return db_result, description
 
-    limit_queries = None
 
-    def __init__(self):
-        if limit_queries is None:
-            #TODO: load_queries files
-            pass
 
-    def check_ids_vality(self ,ids, limit_type):
-        """This return true if ids content is valid and has ids that exits in db
-        
-        PARAMETERS
-        ----------
-            ids - this can be a void list that will return true ever or has a
-            list of ids.
-            limit_type - this is the limit type that is the id for search in the
-            correct table valid content ["departamentos", "municipios",
-            "cantones"]
-
-        RETURNS
-        ---------
-            is_valid - a boolean true if ids are valid
-        """
-        #TODO: implement
+def build_query(fields_dict, filters_dict, limit_type): # TODO
+    if limit_type == 'departamentos':
+        pass
+    if limit_type == 'municipios':
+        pass
+    if limit_type == 'cantones':
         pass
 
-    def execute_query(self, query, result_format):
-        """This will execute the queries in db and will fetch and format the
-        resutls
+#format result.
+def format_result(result, format = 'geojson'):
+    formated_r = None
+    if 'geojson':
+        formated_r = db_to_geo_json(result)
+    elif 'json':
+        formated_r = db_to_json(result)
+    else:
+        return 'Error not valid_format'
+    return formated_r
 
-        PARAMETERS
-        --------
-            query - a string that is the SQL that we going to execute in db.
-            result_format - a string that indicate the format should return the
-            functions valid content ['json', 'geojson']
-
-        RETURNS
-        --------
-            results - a string that is the result formated in the indicate form """
-        #TODO: implement
-        pass
-
-
-class Departamentos(Limit):
-
-    def get(self, ids, props, geometry, political_classes, result_format):
-        #check ids validity
-        #add props
-        #add geometry
-        #add political_casses
-
-        #send to query builder
-        #execute query
-        #get results
-        #TODO: implement
-        pass
+#look for props that will be returned
+def look_for_father_munic(args):
+    father_munic = {}
+    if args.get("father-munic") == 'true':
+        father_munic["cod_munic"] = True
+        father_munic["nombre_munic"] = True
+    return father_munic
 
 
-class Municipios(Limit):
+def look_for_father_dep(args):
+    father_dep = {}
+    if args.get("father-dep") == 'true':
+        father_dep["cod_dep"] = True
+        father_dep["nombre_dep"] = True
+    return father_dep
 
-    def get(self, ids, dep, props, geometry, political_classes,
-            result_format):
-        pass 
 
-class Cantones(Limit):
+def look_for_political_classes(args):
+    political_classes = {}
 
-    def get(self, ids, munic, dep, props, geometry, result_format):
-        pass
+    if args.get("arena-coalision") == 'true':
+        political_classes["arena_coalision_votos"] = True
 
+    if args.get("fmln") == 'true':
+        political_classes["fmln_votos"] = True
+
+    if args.get("gana") == 'true':
+        political_classes["gana_votos"] = True
+
+    if args.get("vamos") == 'true':
+        political_classes["vamos_votos"] = True
+    
+    return political_classes
+
+def look_for_population(args):
+    poblacion = {}
+    if args.get("poblacion") == 'true':
+        poblacion["poblacion"] = True
+    return poblacion
+
+def look_for_geometry(args):
+    geometry = {}
+    if args.get("geometry") == 'true':
+        geometry["geometry"] = True
+    return geometry
+
+#look for query condition
+def filter_per_ids(args,  cod = None):
+    ids = {}
+    if args.get("ids"):
+        #the ids args is a string that looks like '1,2,3'
+        #we need to split by ',' and convert to int
+        ids_arg = args.get("ids")
+        ids_arg = ids_arg.split(',')
+        ids["ids"] = list(map(int, ids_arg))
+    if cod is not None:
+        ids["ids"] = [int(cod)]
+    return ids
+
+def filter_per_deps_ids(args):
+    deps = {}
+    if args.get("deps"):
+        deps_arg = args.get("deps").split(',')
+        deps_arg = list(map(int, deps_arg))
+        deps["deps"] = deps_arg
+    return deps

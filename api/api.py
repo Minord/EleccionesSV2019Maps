@@ -1,19 +1,26 @@
 from flask import Blueprint
 
+from flask import request
+
 api = Blueprint('api', __name__, url_prefix='/api/geoserver')
 
+import pdb
 
 # ============ Departamentos end-points =================
+
 @api.route('/departamentos')
 def departamentos():
+    pdb.set_trace()
     return 'departamentos'
 
 @api.route('/departamento/<cod_dep>')
 def departameto(cod_dep):
+    fields_dict = dep_id
     return 'departemento ' + cod_dep
 
 @api.route('/departamentos/dict')
 def departamentos_dict():
+    fields_dict = dep_id
     return 'departamentos-dict'
 
 
